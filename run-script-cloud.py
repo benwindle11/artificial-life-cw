@@ -31,7 +31,7 @@ if __name__ == '__main__':
     print(training_input_path)
     print(validation_input_path)
 
-    tf_estimator = TensorFlow(entry_point='mnist_keras_tf.py', 
+    tf_estimator = TensorFlow(entry_point='cloud-keras-train.py', 
                           role=role,
                           train_instance_count=1, 
                           train_instance_type='local',
