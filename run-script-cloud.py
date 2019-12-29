@@ -21,7 +21,7 @@ if __name__ == '__main__':
         y_val = test_music_data["labels"]
 
     np.savez('./data/training', image=x_train, label=y_train)
-    np.savez('./data/testing', image=x_val, label=y_val)
+    np.savez('./data/validation', image=x_val, label=y_val)
 
     prefix = 'gtzan-music'
 
