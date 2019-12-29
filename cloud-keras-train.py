@@ -6,9 +6,10 @@ import tensorflow as tf
 import keras
 from keras import backend as K
 from keras.models import Sequential, Model
-from keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization, Conv2D, MaxPooling2D, LeakyReLU, Input, Concatenate, Reshape
+from keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization, Conv2D, MaxPooling2D, Input, Concatenate, Reshape
 from keras.utils import multi_gpu_model
 from keras.datasets import fashion_mnist
+from keras.activations import relu
 import pickle
 
 
@@ -63,7 +64,7 @@ if __name__ == '__main__':
                     kernel_size = (10, 23),
                     strides = (1,  1),
                     padding='same',
-                    activation=LeakyReLU())(input_layer)
+                    activation=relu)(input_layer)
 
     branch1 = MaxPooling2D()(branch1)
 
@@ -71,7 +72,7 @@ if __name__ == '__main__':
                     kernel_size = (5, 11),
                     strides = (1,  1),
                     padding='same',
-                    activation=LeakyReLU())(branch1)
+                    activation=relu)(branch1)
 
     branch1 = MaxPooling2D()(branch1)
 
@@ -79,7 +80,7 @@ if __name__ == '__main__':
                     kernel_size = (3, 5),
                     strides = (1,  1),
                     padding='same',
-                    activation=LeakyReLU())(branch1)
+                    activation=relu)(branch1)
 
     branch1 = MaxPooling2D()(branch1)
 
@@ -87,7 +88,7 @@ if __name__ == '__main__':
                     kernel_size = (2, 4),
                     strides = (1,  1),
                     padding='same',
-                    activation=LeakyReLU())(branch1)
+                    activation=relu)(branch1)
 
     branch1 = MaxPooling2D(pool_size = (1,5))(branch1)
 
@@ -99,7 +100,7 @@ if __name__ == '__main__':
                     kernel_size = (21, 10),
                     strides = (1,  1),
                     padding='same',
-                    activation=LeakyReLU())(input_layer)
+                    activation=relu)(input_layer)
 
     branch2 = MaxPooling2D()(branch2)
 
@@ -107,7 +108,7 @@ if __name__ == '__main__':
                     kernel_size = (10, 5),
                     strides = (1,  1),
                     padding='same',
-                    activation=LeakyReLU())(branch2)
+                    activation=relu)(branch2)
 
     branch2 = MaxPooling2D()(branch2)
 
@@ -115,7 +116,7 @@ if __name__ == '__main__':
                     kernel_size = (5, 3),
                     strides = (1,  1),
                     padding='same',
-                    activation=LeakyReLU())(branch2)
+                    activation=relu)(branch2)
 
     branch2 = MaxPooling2D()(branch2)
 
@@ -123,7 +124,7 @@ if __name__ == '__main__':
                     kernel_size = (4, 2),
                     strides = (1,  1),
                     padding='same',
-                    activation=LeakyReLU())(branch2)
+                    activation=relu)(branch2)
 
     branch2 = MaxPooling2D(pool_size = (5,1))(branch2)
 
@@ -134,7 +135,7 @@ if __name__ == '__main__':
 
     layer = Dropout(0.25)(layer)
 
-    layer = Dense(units=200, activation=LeakyReLU())(layer)
+    layer = Dense(units=200, activation=relu)(layer)
 
     layer = Dense(num_classes, activation='softmax')(layer)
 
@@ -194,7 +195,7 @@ if __name__ == '__main__':
     
     # save Keras model for Tensorflow Serving
     curr_time = time.gmtime()
-    curr_timestamp = time.strftime("%Y-%m-%d'T'%H-%M-%S", curr_time)
+    curr_timestamp = time.strftime("%Y-%m-%dT%H-%M-%S", curr_time)
     filename = "model"+curr_timestamp+".h5"
     model.save(filename)
 
