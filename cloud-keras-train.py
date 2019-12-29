@@ -176,7 +176,7 @@ if __name__ == '__main__':
         
     model.compile(loss=keras.losses.categorical_crossentropy,
                   optimizer=keras.optimizers.Adam(
-                      learning_rate=0.00005,
+                      lr=0.00005,
                       beta_1=0.9,
                       beta_2=0.999),
                   metrics=['accuracy'])
