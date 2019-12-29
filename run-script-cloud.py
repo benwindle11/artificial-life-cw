@@ -10,12 +10,12 @@ if __name__ == '__main__':
     sess = sagemaker.Session()
     role = sagemaker.get_execution_role()
 
-    with open('train_spect_music_data.pkl', 'rb') as f:
+    with open('data/train_spect_music_data.pkl', 'rb') as f:
         train_music_data = pickle.load(f)
         x_train = train_music_data["audio"]
         y_train = train_music_data["labels"]
     
-    with open('test_spect_music_data.pkl', 'rb') as f:
+    with open('data/test_spect_music_data.pkl', 'rb') as f:
         test_music_data = pickle.load(f)
         x_val = test_music_data["audio"]
         y_val = test_music_data["labels"]
