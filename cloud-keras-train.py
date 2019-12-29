@@ -35,8 +35,8 @@ if __name__ == '__main__':
     
     x_train = np.load(os.path.join(training_dir, 'training.npz'))['image']
     y_train = np.load(os.path.join(training_dir, 'training.npz'))['label']
-    x_val  = np.load(os.path.join(validation_dir, 'testing.npz'))['image']
-    y_val  = np.load(os.path.join(validation_dir, 'testing.npz'))['label']
+    x_val  = np.load(os.path.join(validation_dir, 'validation.npz'))['image']
+    y_val  = np.load(os.path.join(validation_dir, 'validation.npz'))['label']
 
     # input image dimensions
     img_rows, img_cols = 80, 80
