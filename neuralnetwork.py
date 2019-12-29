@@ -88,7 +88,7 @@ branch2 = Conv2D(filters = 128,
 branch2 = MaxPooling2D(pool_size = (5,1))(branch2)
 
 #what is axis?
-layer = Concatenate(axis=axis)([branch1, branch2])
+layer = Concatenate(axis=1)([branch1, branch2])
 
 model = Model(input_layer, layer)
 
