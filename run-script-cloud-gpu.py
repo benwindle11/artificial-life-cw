@@ -45,4 +45,4 @@ if __name__ == '__main__':
 
     print("estimator created, fitting...")
     
-    tf_estimator.fit({'training': training_input_path, 'validation': validation_input_path}) 
+    tf_estimator.fit({'training': training_input_path, 'validation': validation_input_path})

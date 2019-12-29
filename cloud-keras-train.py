@@ -1,6 +1,7 @@
 import argparse, os
 import numpy as np
-
+import time
+import boto3
 import tensorflow as tf
 import keras
 from keras import backend as K
@@ -192,10 +193,17 @@ if __name__ == '__main__':
     print('testing accuracy:', score[1])
     
     # save Keras model for Tensorflow Serving
-    sess = K.get_session()
-    tf.saved_model.simple_save(
-        sess,
-        os.path.join(model_dir, 'model/1'),
-        inputs={'inputs': model.input},
-        outputs={t.name: t for t in model.outputs})
+    curr_time = time.gmtime()
+    curr_timestamp = time.strftime("%Y-%m-%d'T'%H-%M-%S", curr_time)
+    filename = "model"+curr_timestamp+".h5"
+    model.save(filename)
+
+    s3 = boto3.client('s3')
+    with open(filename, 'rb') as f:
+        s3.upload_fileobj(f, "windle-cw", filename)
+    
+
+
+
+
     

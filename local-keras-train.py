@@ -1,5 +1,7 @@
 import argparse, os
 import numpy as np
+import time
+import boto3
 
 import tensorflow as tf
 import keras
@@ -15,11 +17,11 @@ if __name__ == '__main__':
         
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--epochs', type=int, default=10)
+    parser.add_argument('--epochs', type=int, default=1)
     parser.add_argument('--learning-rate', type=float, default=0.01)
     parser.add_argument('--batch-size', type=int, default=128)
     parser.add_argument('--gpu-count', type=int, default=0)
-    parser.add_argument('--model-dir', type=str, default='/tmp')
+    parser.add_argument('--model-dir', type=str, default='model')
     parser.add_argument('--training', type=str, default='data')
     parser.add_argument('--testing', type=str, default='data')
     
@@ -159,30 +161,6 @@ if __name__ == '__main__':
     #need to add softmax
 
     model.summary()
-
-    # model.compile('adam', 'categorical_crossentropy', ['accuracy'])
-    # model = Sequential()
-    
-    # # 1st convolution block
-    # model.add(Conv2D(64, kernel_size=(3,3), padding='same', input_shape=input_shape))
-    # model.add(BatchNormalization(axis=batch_norm_axis))
-    # model.add(Activation('relu'))
-    # model.add(MaxPooling2D(pool_size=(2,2), strides=2))
-    
-    # # 2nd convolution block
-    # model.add(Conv2D(128, kernel_size=(3,3), padding='valid'))
-    # model.add(BatchNormalization(axis=batch_norm_axis))
-    # model.add(Activation('relu'))
-    # model.add(MaxPooling2D(pool_size=(2,2), strides=2))
-
-    # # Fully connected block
-    # model.add(Flatten())
-    # model.add(Dense(512))
-    # model.add(Activation('relu'))
-    # model.add(Dropout(0.3))
-
-    # # Output layer
-    # model.add(Dense(num_classes, activation='softmax'))
     
     print(model.summary())
 
@@ -207,10 +185,7 @@ if __name__ == '__main__':
     print('testing accuracy:', score[1])
     
     # save Keras model for Tensorflow Serving
-    sess = K.get_session()
-    tf.saved_model.simple_save(
-        sess,
-        os.path.join(model_dir, 'model/1'),
-        inputs={'inputs': model.input},
-        outputs={t.name: t for t in model.outputs})
+    curr_time = time.gmtime()
+    curr_timestamp = time.strftime("%Y-%m-%d'T'%H-%M-%S", curr_time)
+    model.save("model"+curr_timestamp+".h5")
     
