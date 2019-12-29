@@ -21,34 +21,37 @@ path_wd = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(
 ###############
 
 # (x_train, _), (x_test, y_test) = 
-with open("pickled-data/train_spect_music_data.pkl", "rb") as f:
-    train_data = pickle.load(f)
+def store_data():
+    with open("pickled-data/train_spect_music_data.pkl", "rb") as f:
+        train_data = pickle.load(f)
 
-x_train = train_data["audio"]
-x_train_np = np.array(x_train)
-x_train_np = x_train_np.reshape(x_train_np.shape[0], 80, 80, 1)
+    x_train = train_data["audio"]
+    x_train_np = np.array(x_train)
+    x_train_np = x_train_np.reshape(x_train_np.shape[0], 80, 80, 1)
 
-with open("pickled-data/test_spect_music_data.pkl", "rb") as f:
-    test_data = pickle.load(f)
+    with open("pickled-data/test_spect_music_data.pkl", "rb") as f:
+        test_data = pickle.load(f)
 
-x_test = test_data["audio"]
-y_test = test_data["labels"]
+    x_test = test_data["audio"]
+    y_test = test_data["labels"]
 
-y_test_hot = []
-for y in y_test:
-    label = [0 for i in range(0,10)]
-    label[y] = 1
-    y_test_hot.append(label)
+    y_test_hot = []
+    for y in y_test:
+        label = [0 for i in range(0,10)]
+        label[y] = 1
+        y_test_hot.append(label)
 
-x_test_np = np.array(x_test)
-x_test_np = x_test_np.reshape(x_test_np.shape[0], 80, 80, 1)
-print(x_test_np.shape)
-# Save dataset so SNN toolbox can find it.
-np.savez_compressed(os.path.join(path_wd, 'x_test'), x_test_np)
-np.savez_compressed(os.path.join(path_wd, 'y_test'), y_test_hot)
-# SNN toolbox will not do any training, but we save a subset of the training
-# set so the toolbox can use it when normalizing the network parameters.
-np.savez_compressed(os.path.join(path_wd, 'x_norm'), x_train_np[::10])
+    x_test_np = np.array(x_test)
+    x_test_np = x_test_np.reshape(x_test_np.shape[0], 80, 80, 1)
+    print(x_test_np.shape)
+    # Save dataset so SNN toolbox can find it.
+    np.savez_compressed(os.path.join(path_wd, 'x_test'), x_test_np)
+    np.savez_compressed(os.path.join(path_wd, 'y_test'), y_test_hot)
+    # SNN toolbox will not do any training, but we save a subset of the training
+    # set so the toolbox can use it when normalizing the network parameters.
+    np.savez_compressed(os.path.join(path_wd, 'x_norm'), x_train_np[::10])
+
+store_data()
 
 # CREATE ANN #
 ##############
@@ -64,7 +67,7 @@ np.savez_compressed(os.path.join(path_wd, 'x_norm'), x_train_np[::10])
 # Create a config file with experimental setup for SNN Toolbox.
 configparser = import_configparser()
 config = configparser.ConfigParser()
-model_name = "model2019-12-29T22-10-05"
+model_name = "model2019-12-29T23-30-36"
 
 config['paths'] = {
     'path_wd': path_wd,             # Path to model.
@@ -74,7 +77,7 @@ config['paths'] = {
 
 config['tools'] = {
     'evaluate_ann': True,           # Test ANN on dataset before conversion.
-    'normalize': True               # Normalize weights for full dynamic range.
+    'normalize': False               # Normalize weights for full dynamic range.
 }
 
 config['simulation'] = {
@@ -82,7 +85,7 @@ config['simulation'] = {
     'duration': 50,                 # Number of time steps to run each sample.
     'num_to_test': 100,             # How many test samples to run.
     'batch_size': 50,               # Batch size for simulation.
-    'keras_backend': 'tensorflow'   # Which keras backend to use.
+    'keras_backend': 'theano'   # Which keras backend to use.
 }
 
 config['output'] = {

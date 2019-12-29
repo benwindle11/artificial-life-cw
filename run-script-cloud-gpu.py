@@ -39,7 +39,7 @@ if __name__ == '__main__':
                           py_version='py3',
                           script_mode=True,
                           hyperparameters={
-                              'epochs': 1,
+                              'epochs': 100,
                               'batch-size': 256}
                          )
 
