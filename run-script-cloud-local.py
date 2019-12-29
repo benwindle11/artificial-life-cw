@@ -40,5 +40,7 @@ if __name__ == '__main__':
                           script_mode=True,
                           hyperparameters={'epochs': 1}
                          )
+
+    print("estimator created, fitting...")
     
     tf_estimator.fit({'training': training_input_path, 'validation': validation_input_path}) 
