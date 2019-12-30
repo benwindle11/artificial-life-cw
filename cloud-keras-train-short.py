@@ -66,10 +66,9 @@ if __name__ == '__main__':
                     padding='same',
                     activation=relu)(input_layer)
 
-    branch1 = AveragePooling2D(pool_size=(40,4))(branch1)
+    branch1 = AveragePooling2D(pool_size=(80,4))(branch1)
 
     branch1 = Flatten()(branch1)
-
 
     ##BRANCH2
     branch2 = Conv2D(filters = 16,
@@ -78,14 +77,13 @@ if __name__ == '__main__':
                     padding='same',
                     activation=relu)(input_layer)
 
-    branch2 = AveragePooling2D(pool_size=(4,40))(branch2)
+    branch2 = AveragePooling2D(pool_size=(4,80))(branch2)
 
     branch2 = Flatten()(branch2)
 
     #what is axis?
     layer = Concatenate(axis=1)([branch1, branch2])
 
-    layer = Flatten()(layer)
     layer = Dropout(0.1)(layer)
 
     layer = Dense(units=200, activation=None)(layer)
