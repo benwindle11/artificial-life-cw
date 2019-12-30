@@ -1,0 +1,2 @@
+short testing accuracy - 0.757
+long testing accuracyres
