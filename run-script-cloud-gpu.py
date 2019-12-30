@@ -3,9 +3,18 @@ import os
 import keras
 import pickle
 import numpy as np
+import argparse
 from sagemaker.tensorflow import TensorFlow
 
 if __name__ == '__main__':    
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--epochs', type=int, default=10)
+    
+    args, _ = parser.parse_known_args()
+    
+    epochs     = args.epochs
 
     sess = sagemaker.Session()
     role = sagemaker.get_execution_role()
@@ -39,7 +48,7 @@ if __name__ == '__main__':
                           py_version='py3',
                           script_mode=True,
                           hyperparameters={
-                              'epochs': 100,
+                              'epochs': epochs,
                               'batch-size': 256}
                          )
 
