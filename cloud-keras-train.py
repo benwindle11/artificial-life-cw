@@ -6,7 +6,7 @@ import tensorflow as tf
 import keras
 from keras import backend as K
 from keras.models import Sequential, Model
-from keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization, Conv2D, MaxPooling2D, Input, Concatenate, Reshape
+from keras.layers import Dense, Dropout, Activation, Flatten, BatchNormalization, Conv2D, AveragePooling2D, Input, Concatenate, Reshape
 from keras.utils import multi_gpu_model
 from keras.datasets import fashion_mnist
 from keras.activations import relu
@@ -66,7 +66,7 @@ if __name__ == '__main__':
                     padding='same',
                     activation=relu)(input_layer)
 
-    branch1 = MaxPooling2D()(branch1)
+    branch1 = AveragePooling2D()(branch1)
 
     branch1 = Conv2D(filters = 32,
                     kernel_size = (5, 11),
@@ -74,7 +74,7 @@ if __name__ == '__main__':
                     padding='same',
                     activation=relu)(branch1)
 
-    branch1 = MaxPooling2D()(branch1)
+    branch1 = AveragePooling2D()(branch1)
 
     branch1 = Conv2D(filters = 64,
                     kernel_size = (3, 5),
@@ -82,7 +82,7 @@ if __name__ == '__main__':
                     padding='same',
                     activation=relu)(branch1)
 
-    branch1 = MaxPooling2D()(branch1)
+    branch1 = AveragePooling2D()(branch1)
 
     branch1 = Conv2D(filters = 128,
                     kernel_size = (2, 4),
@@ -90,7 +90,7 @@ if __name__ == '__main__':
                     padding='same',
                     activation=relu)(branch1)
 
-    branch1 = MaxPooling2D(pool_size = (1,5))(branch1)
+    branch1 = AveragePooling2D(pool_size = (1,5))(branch1)
 
     branch1 = Flatten()(branch1)
 
@@ -102,7 +102,7 @@ if __name__ == '__main__':
                     padding='same',
                     activation=relu)(input_layer)
 
-    branch2 = MaxPooling2D()(branch2)
+    branch2 = AveragePooling2D()(branch2)
 
     branch2 = Conv2D(filters = 32,
                     kernel_size = (10, 5),
@@ -110,7 +110,7 @@ if __name__ == '__main__':
                     padding='same',
                     activation=relu)(branch2)
 
-    branch2 = MaxPooling2D()(branch2)
+    branch2 = AveragePooling2D()(branch2)
 
     branch2 = Conv2D(filters = 64,
                     kernel_size = (5, 3),
@@ -118,7 +118,7 @@ if __name__ == '__main__':
                     padding='same',
                     activation=relu)(branch2)
 
-    branch2 = MaxPooling2D()(branch2)
+    branch2 = AveragePooling2D()(branch2)
 
     branch2 = Conv2D(filters = 128,
                     kernel_size = (4, 2),
@@ -126,7 +126,7 @@ if __name__ == '__main__':
                     padding='same',
                     activation=relu)(branch2)
 
-    branch2 = MaxPooling2D(pool_size = (5,1))(branch2)
+    branch2 = AveragePooling2D(pool_size = (5,1))(branch2)
 
     branch2 = Flatten()(branch2)
 
@@ -154,13 +154,13 @@ if __name__ == '__main__':
     # model.add(Conv2D(64, kernel_size=(3,3), padding='same', input_shape=input_shape))
     # model.add(BatchNormalization(axis=batch_norm_axis))
     # model.add(Activation('relu'))
-    # model.add(MaxPooling2D(pool_size=(2,2), strides=2))
+    # model.add(AveragePooling2D(pool_size=(2,2), strides=2))
     
     # # 2nd convolution block
     # model.add(Conv2D(128, kernel_size=(3,3), padding='valid'))
     # model.add(BatchNormalization(axis=batch_norm_axis))
     # model.add(Activation('relu'))
-    # model.add(MaxPooling2D(pool_size=(2,2), strides=2))
+    # model.add(AveragePooling2D(pool_size=(2,2), strides=2))
 
     # # Fully connected block
     # model.add(Flatten())

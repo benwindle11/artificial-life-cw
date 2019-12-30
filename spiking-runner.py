@@ -67,7 +67,7 @@ store_data()
 # Create a config file with experimental setup for SNN Toolbox.
 configparser = import_configparser()
 config = configparser.ConfigParser()
-model_name = "model2019-12-29T23-30-36"
+model_name = "model2019-12-30T00-01-17"
 
 config['paths'] = {
     'path_wd': path_wd,             # Path to model.
@@ -85,7 +85,7 @@ config['simulation'] = {
     'duration': 50,                 # Number of time steps to run each sample.
     'num_to_test': 100,             # How many test samples to run.
     'batch_size': 50,               # Batch size for simulation.
-    'keras_backend': 'theano'   # Which keras backend to use.
+    'keras_backend': 'tensorflow'   # Which keras backend to use.
 }
 
 config['output'] = {
