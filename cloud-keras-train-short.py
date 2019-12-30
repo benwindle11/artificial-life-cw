@@ -66,31 +66,7 @@ if __name__ == '__main__':
                     padding='same',
                     activation=relu)(input_layer)
 
-    branch1 = AveragePooling2D()(branch1)
-
-    branch1 = Conv2D(filters = 32,
-                    kernel_size = (5, 11),
-                    strides = (1,  1),
-                    padding='same',
-                    activation=relu)(branch1)
-
-    branch1 = AveragePooling2D()(branch1)
-
-    branch1 = Conv2D(filters = 64,
-                    kernel_size = (3, 5),
-                    strides = (1,  1),
-                    padding='same',
-                    activation=relu)(branch1)
-
-    branch1 = AveragePooling2D()(branch1)
-
-    branch1 = Conv2D(filters = 128,
-                    kernel_size = (2, 4),
-                    strides = (1,  1),
-                    padding='same',
-                    activation=relu)(branch1)
-
-    branch1 = AveragePooling2D(pool_size = (1,5))(branch1)
+    branch1 = AveragePooling2D(pool_size=(80,4))(branch1)
 
     branch1 = Flatten()(branch1)
 
@@ -102,40 +78,17 @@ if __name__ == '__main__':
                     padding='same',
                     activation=relu)(input_layer)
 
-    branch2 = AveragePooling2D()(branch2)
-
-    branch2 = Conv2D(filters = 32,
-                    kernel_size = (10, 5),
-                    strides = (1,  1),
-                    padding='same',
-                    activation=relu)(branch2)
-
-    branch2 = AveragePooling2D()(branch2)
-
-    branch2 = Conv2D(filters = 64,
-                    kernel_size = (5, 3),
-                    strides = (1,  1),
-                    padding='same',
-                    activation=relu)(branch2)
-
-    branch2 = AveragePooling2D()(branch2)
-
-    branch2 = Conv2D(filters = 128,
-                    kernel_size = (4, 2),
-                    strides = (1,  1),
-                    padding='same',
-                    activation=relu)(branch2)
-
-    branch2 = AveragePooling2D(pool_size = (5,1))(branch2)
+    branch2 = AveragePooling2D(pool_size=(4,80))(branch2)
 
     branch2 = Flatten()(branch2)
 
     #what is axis?
     layer = Concatenate(axis=1)([branch1, branch2])
 
-    layer = Dropout(0.25)(layer)
+    layer = Flatten()(layer)
+    layer = Dropout(0.1)(layer)
 
-    layer = Dense(units=200, activation=relu)(layer)
+    layer = Dense(units=200, activation=None)(layer)
 
     layer = Dense(num_classes, activation='softmax')(layer)
 

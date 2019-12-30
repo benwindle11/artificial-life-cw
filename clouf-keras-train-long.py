@@ -2,7 +2,6 @@ import argparse, os
 import numpy as np
 import time
 import boto3
-
 import tensorflow as tf
 import keras
 from keras import backend as K
@@ -18,13 +17,13 @@ if __name__ == '__main__':
         
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--epochs', type=int, default=1)
+    parser.add_argument('--epochs', type=int, default=10)
     parser.add_argument('--learning-rate', type=float, default=0.01)
     parser.add_argument('--batch-size', type=int, default=128)
-    parser.add_argument('--gpu-count', type=int, default=0)
-    parser.add_argument('--model-dir', type=str, default='model')
-    parser.add_argument('--training', type=str, default='data')
-    parser.add_argument('--testing', type=str, default='data')
+    parser.add_argument('--gpu-count', type=int, default=os.environ['SM_NUM_GPUS'])
+    parser.add_argument('--model-dir', type=str, default=os.environ['SM_MODEL_DIR'])
+    parser.add_argument('--training', type=str, default=os.environ['SM_CHANNEL_TRAINING'])
+    parser.add_argument('--validation', type=str, default=os.environ['SM_CHANNEL_VALIDATION'])
     
     args, _ = parser.parse_known_args()
     
@@ -34,27 +33,12 @@ if __name__ == '__main__':
     gpu_count  = args.gpu_count
     model_dir  = args.model_dir
     training_dir   = args.training
-    testing_dir = args.testing
-    
-    # Download the data set
-    os.makedirs("./data", exist_ok = True)
-    with open("pickled-data/train_spect_music_data.pkl", "rb") as f:
-        train_music_data = pickle.load(f)
-        x_train = train_music_data["audio"]
-        y_train = train_music_data["labels"]
-
-    with open("pickled-data/test_spect_music_data.pkl", "rb") as f:
-        test_music_data = pickle.load(f)
-        x_val = test_music_data["audio"]
-        y_val = test_music_data["labels"]
-
-    np.savez('./data/training', image=x_train, label=y_train)
-    np.savez('./data/testing', image=x_val, label=y_val)
+    validation_dir = args.validation
     
     x_train = np.load(os.path.join(training_dir, 'training.npz'))['image']
     y_train = np.load(os.path.join(training_dir, 'training.npz'))['label']
-    x_val  = np.load(os.path.join(testing_dir, 'testing.npz'))['image']
-    y_val  = np.load(os.path.join(testing_dir, 'testing.npz'))['label']
+    x_val  = np.load(os.path.join(validation_dir, 'validation.npz'))['image']
+    y_val  = np.load(os.path.join(validation_dir, 'validation.npz'))['label']
 
     # input image dimensions
     img_rows, img_cols = 80, 80
@@ -163,6 +147,30 @@ if __name__ == '__main__':
     #need to add softmax
 
     model.summary()
+
+    # model.compile('adam', 'categorical_crossentropy', ['accuracy'])
+    # model = Sequential()
+    
+    # # 1st convolution block
+    # model.add(Conv2D(64, kernel_size=(3,3), padding='same', input_shape=input_shape))
+    # model.add(BatchNormalization(axis=batch_norm_axis))
+    # model.add(Activation('relu'))
+    # model.add(AveragePooling2D(pool_size=(2,2), strides=2))
+    
+    # # 2nd convolution block
+    # model.add(Conv2D(128, kernel_size=(3,3), padding='valid'))
+    # model.add(BatchNormalization(axis=batch_norm_axis))
+    # model.add(Activation('relu'))
+    # model.add(AveragePooling2D(pool_size=(2,2), strides=2))
+
+    # # Fully connected block
+    # model.add(Flatten())
+    # model.add(Dense(512))
+    # model.add(Activation('relu'))
+    # model.add(Dropout(0.3))
+
+    # # Output layer
+    # model.add(Dense(num_classes, activation='softmax'))
     
     print(model.summary())
 
@@ -171,7 +179,7 @@ if __name__ == '__main__':
         
     model.compile(loss=keras.losses.categorical_crossentropy,
                   optimizer=keras.optimizers.Adam(
-                      learning_rate=0.00005,
+                      lr=0.00005,
                       beta_1=0.9,
                       beta_2=0.999),
                   metrics=['accuracy'])
@@ -189,5 +197,15 @@ if __name__ == '__main__':
     # save Keras model for Tensorflow Serving
     curr_time = time.gmtime()
     curr_timestamp = time.strftime("%Y-%m-%dT%H-%M-%S", curr_time)
-    model.save("model/model"+curr_timestamp+".h5")
+    filename = "model"+curr_timestamp+".h5"
+    model.save(filename)
+
+    s3 = boto3.client('s3')
+    with open(filename, 'rb') as f:
+        s3.upload_fileobj(f, "windle-cw", filename)
+    
+
+
+
+
     

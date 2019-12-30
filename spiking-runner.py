@@ -13,9 +13,9 @@ from snntoolbox.utils.utils import import_configparser
 # Define path where model and output files will be stored.
 # The user is responsible for cleaning up this temporary directory.
 path_wd = os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(
-    __file__)), 'snn'))
+    __file__)), 'snn-long'))
 
-# os.makedirs(path_wd)
+os.makedirs(path_wd, exist_ok=True)
 # print(path_wd)
 # GET DATASET #
 ###############
@@ -67,7 +67,7 @@ store_data()
 # Create a config file with experimental setup for SNN Toolbox.
 configparser = import_configparser()
 config = configparser.ConfigParser()
-model_name = "model2019-12-30T00-01-17"
+model_name = "model2019-12-30T00-29-40"
 
 config['paths'] = {
     'path_wd': path_wd,             # Path to model.
@@ -82,7 +82,7 @@ config['tools'] = {
 
 config['simulation'] = {
     'simulator': 'INI',             # Chooses execution backend of SNN toolbox.
-    'duration': 50,                 # Number of time steps to run each sample.
+    'duration': 200,                 # Number of time steps to run each sample.
     'num_to_test': 100,             # How many test samples to run.
     'batch_size': 50,               # Batch size for simulation.
     'keras_backend': 'tensorflow'   # Which keras backend to use.
