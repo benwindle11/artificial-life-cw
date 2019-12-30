@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
     branch1 = AveragePooling2D(pool_size=(80,4))(branch1)
 
-    branch1 = Flatten()(branch1)
+    # branch1 = Flatten()(branch1)
 
 
     ##BRANCH2
@@ -80,7 +80,7 @@ if __name__ == '__main__':
 
     branch2 = AveragePooling2D(pool_size=(4,80))(branch2)
 
-    branch2 = Flatten()(branch2)
+    # branch2 = Flatten()(branch2)
 
     #what is axis?
     layer = Concatenate(axis=1)([branch1, branch2])

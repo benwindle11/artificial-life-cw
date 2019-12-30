@@ -2,6 +2,7 @@ import os
 import time
 import numpy as np
 import pickle
+import random
 
 from snntoolbox.bin.run import main
 from snntoolbox.utils.utils import import_configparser
@@ -19,6 +20,10 @@ os.makedirs(path_wd, exist_ok=True)
 # print(path_wd)
 # GET DATASET #
 ###############
+def shuffle_data(data, labels):
+    zipped_list = list(zip(data, labels))
+    random.shuffle(zipped_list)
+    return zip(*zipped_list)
 
 # (x_train, _), (x_test, y_test) = 
 def store_data():
@@ -44,6 +49,8 @@ def store_data():
     x_test_np = np.array(x_test)
     x_test_np = x_test_np.reshape(x_test_np.shape[0], 80, 80, 1)
     print(x_test_np.shape)
+    x_test_np, y_test_np = shuffle_data(x_test_np, y_test_np)
+
     # Save dataset so SNN toolbox can find it.
     np.savez_compressed(os.path.join(path_wd, 'x_test'), x_test_np)
     np.savez_compressed(os.path.join(path_wd, 'y_test'), y_test_hot)
@@ -52,7 +59,6 @@ def store_data():
     np.savez_compressed(os.path.join(path_wd, 'x_norm'), x_train_np[::10])
 
 store_data()
-
 # CREATE ANN #
 ##############
 
@@ -82,7 +88,7 @@ config['tools'] = {
 
 config['simulation'] = {
     'simulator': 'INI',             # Chooses execution backend of SNN toolbox.
-    'duration': 200,                 # Number of time steps to run each sample.
+    'duration': 50,                 # Number of time steps to run each sample.
     'num_to_test': 100,             # How many test samples to run.
     'batch_size': 50,               # Batch size for simulation.
     'keras_backend': 'tensorflow'   # Which keras backend to use.
