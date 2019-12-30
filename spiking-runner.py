@@ -49,7 +49,7 @@ def store_data():
     x_test_np = np.array(x_test)
     x_test_np = x_test_np.reshape(x_test_np.shape[0], 80, 80, 1)
     print(x_test_np.shape)
-    x_test_np, y_test_np = shuffle_data(x_test_np, y_test_np)
+    x_test_np, y_test_hot = shuffle_data(x_test_np, y_test_hot)
 
     # Save dataset so SNN toolbox can find it.
     np.savez_compressed(os.path.join(path_wd, 'x_test'), x_test_np)
@@ -59,6 +59,12 @@ def store_data():
     np.savez_compressed(os.path.join(path_wd, 'x_norm'), x_train_np[::10])
 
 store_data()
+# alpha = [['a', 'b', 'c'], ['d', 'e', 'f'], ['g', 'h', 'i']]
+# num = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '9']]
+# (alpha, num) = shuffle_data(alpha, num)
+
+# print((alpha, num))
+# exit()
 # CREATE ANN #
 ##############
 
@@ -73,7 +79,7 @@ store_data()
 # Create a config file with experimental setup for SNN Toolbox.
 configparser = import_configparser()
 config = configparser.ConfigParser()
-model_name = "model2019-12-30T00-29-40"
+model_name = "model2019-12-30T14-38-53"
 
 config['paths'] = {
     'path_wd': path_wd,             # Path to model.
@@ -101,7 +107,8 @@ config['output'] = {
         'activations',
         'correlation',
         'v_mem',
-        'error_t'}
+        'error_t'},
+    'log_vars': {'all'}
 }
 
 # Store config file.
