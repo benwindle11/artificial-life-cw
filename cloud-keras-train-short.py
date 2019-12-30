@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
     branch1 = AveragePooling2D(pool_size=(80,4))(branch1)
 
-    # branch1 = Flatten()(branch1)
+    branch1 = Flatten()(branch1)
 
 
     ##BRANCH2
