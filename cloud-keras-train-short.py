@@ -66,7 +66,7 @@ if __name__ == '__main__':
                     padding='same',
                     activation=relu)(input_layer)
 
-    branch1 = AveragePooling2D(pool_size=(80,4))(branch1)
+    branch1 = AveragePooling2D(pool_size=(20, 1))(branch1)
 
     branch1 = Flatten()(branch1)
 
@@ -77,7 +77,7 @@ if __name__ == '__main__':
                     padding='same',
                     activation=relu)(input_layer)
 
-    branch2 = AveragePooling2D(pool_size=(4,80))(branch2)
+    branch2 = AveragePooling2D(pool_size=(1,20))(branch2)
 
     branch2 = Flatten()(branch2)
 
