@@ -97,7 +97,6 @@ if __name__ == '__main__':
     
 
     #need to add softmax
-
     model.summary()
 
     # model.compile('adam', 'categorical_crossentropy', ['accuracy'])
@@ -149,7 +148,7 @@ if __name__ == '__main__':
     # save Keras model for Tensorflow Serving
     curr_time = time.gmtime()
     curr_timestamp = time.strftime("%Y-%m-%dT%H-%M-%S", curr_time)
-    filename = "model"+curr_timestamp+".h5"
+    filename = "shortmodel"+curr_timestamp+".h5"
     model.save(filename)
 
     s3 = boto3.client('s3')
